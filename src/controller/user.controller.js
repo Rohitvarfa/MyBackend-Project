@@ -2,6 +2,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { User } from "../models/user.model.js";
 import { uploadOnCloudinary } from "../utils/Cloudinary.js";
+import { verifyJWT } from "../middlewares/auth.middleware.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
@@ -11,9 +12,11 @@ import mongoose from "mongoose";
 const generateAccessAndRefereshTokens = async(userId) =>{
     try {
         const user = await User.findById(userId)
+        console.log(user);
         const accessToken = user.generateAccessToken()
+        console.log(accessToken);
         const refreshToken = user.generateRefreshToken()
-
+        console.log(refreshToken);
         user.refreshToken = refreshToken
         await user.save({ validateBeforeSave: false })
 
